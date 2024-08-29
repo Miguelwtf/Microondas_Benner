@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
+/*
 namespace Microondas.Properties
 {
     internal class DBProgramas
@@ -21,13 +21,15 @@ namespace Microondas.Properties
             return result == 1;
         }
 
-        public List<DBProgramas> Get()
-        {
+        //public List<DBProgramas> Get()
+        //{
+            /*
             var conn = new DBConnection();
             string query = @"SELECT * FROM dbprogramas";
 
             var result = conn.Connection.Query<DBProgramas>(sql: query);
-            return result.Tolist();
+            //return result.Tolist();
+            /*
 
         }
 
@@ -39,7 +41,7 @@ namespace Microondas.Properties
                 throw new ArgumentException("Objeto ProgramaAquecimento ou Id inválido.", "Error");
             //}
 
-            var conn = new Properties.DBProgramas();
+            /*var conn = new Properties.DBProgramas();
 
             string query = @"UPDATE public.programaaquecimento
 	                        SET nomeprograma=@NomePrograma, alimento=@Alimento, tempo=@Tempo, potencia=@Potencia, 
@@ -48,13 +50,14 @@ namespace Microondas.Properties
 
             var result = conn.Connection.Execute(sql: query, param: dbprogramas);
 
-
             return result == 1;
-        }
+            */
+        //}
 
 
-    }
-}
+    //}
+//}
+
 /*
  Cadastro de programas
 Id:
