@@ -22,7 +22,7 @@ namespace Microondas
             timer2.Interval = 1000;
         }
 
-        /* Atualiza o Visor  */
+        /* Atualiza o Visor */
         private void UpdateVisor()
         {
             if (timer2.Enabled)
