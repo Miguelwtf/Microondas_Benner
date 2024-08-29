@@ -28,6 +28,7 @@ namespace Microondas.Properties
 
             var result = conn.Connection.Query<DBProgramas>(sql: query);
             return result.Tolist();
+
         }
 
 
@@ -66,5 +67,8 @@ Instruções:
 
 "INSERT INTO public.microondas(id, nome, alimento, tempo, potencia, instrucoes)
     VALUES (?,?,?,?,?,?);";
+
+
+
 
  */
