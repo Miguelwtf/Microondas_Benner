@@ -19,6 +19,7 @@ namespace Microondas
         private int indPotencia = 0;
         private bool operando = false;
         private bool preenchAutomatico = false;
+        private bool pausado = false;
 
         public Form1()
         {
@@ -111,60 +112,67 @@ namespace Microondas
         /* Botão Liga */
         private void buttonLiga_Click(object sender, EventArgs e)
         {
-                // Verifica se há uma linha selecionada no dataGrid
-            if (dataGrid.SelectedRows.Count > 0)
+            if (pausado)
             {
-                var selectedRow = dataGrid.SelectedRows[0];
-                var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
-                var potenciaCellValue = selectedRow.Cells["Potencia"].Value?.ToString();
-                int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
-                bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
-
-                if (tempoCellValue != null)
-                {
-                    int minutos = int.Parse(tempoCellValue.Substring(0, 2));
-                    int segundos = int.Parse(tempoCellValue.Substring(3, 2));
-                    totalTimeInSeconds = (minutos * 60) + segundos;
-
-                    if (int.TryParse(potenciaCellValue, out int potencia))
-                    {
-                        indPotencia = potencia;
-                        txtPotencia.Text = indPotencia.ToString();
-                    }
-                }
-
-                if (operando && !isPadrao)
-                {
-                    totalTimeInSeconds += 30;
-                }
+                timer2.Start();
+                pausado = false;
             }
             else
             {
-                // Caso não haja uma linha selecionada, usa 30 segundos como tempo padrão
-                string paddedInput = input.PadLeft(4, '0');
-                int minutos = int.Parse(paddedInput.Substring(0, 2));
-                int segundos = int.Parse(paddedInput.Substring(2, 2));
-                int novoTempoEmSegundos = (minutos * 60) + segundos;
-
-                if (operando)
+                if (dataGrid.SelectedRows.Count > 0)
                 {
-                    totalTimeInSeconds += 30;
+                    var selectedRow = dataGrid.SelectedRows[0];
+                    var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
+                    var potenciaCellValue = selectedRow.Cells["Potencia"].Value?.ToString();
+                    int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
+                    bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
+
+                    if (tempoCellValue != null)
+                    {
+                        int minutos = int.Parse(tempoCellValue.Substring(0, 2));
+                        int segundos = int.Parse(tempoCellValue.Substring(3, 2));
+                        totalTimeInSeconds = (minutos * 60) + segundos;
+
+                        if (int.TryParse(potenciaCellValue, out int potencia))
+                        {
+                            indPotencia = potencia;
+                            txtPotencia.Text = indPotencia.ToString();
+                        }
+                    }
+
+                    if (operando && !isPadrao)
+                    {
+                        totalTimeInSeconds += 30;
+                    }
                 }
                 else
                 {
-                    if (indPotencia == 0)
+                    string paddedInput = input.PadLeft(4, '0');
+                    int minutos = int.Parse(paddedInput.Substring(0, 2));
+                    int segundos = int.Parse(paddedInput.Substring(2, 2));
+                    int novoTempoEmSegundos = (minutos * 60) + segundos;
+
+                    if (operando)
                     {
-                        indPotencia = 10;
-                        txtPotencia.Text = indPotencia.ToString();
+                        totalTimeInSeconds += 30;
                     }
+                    else
+                    {
+                        if (indPotencia == 0)
+                        {
+                            indPotencia = 10;
+                            txtPotencia.Text = indPotencia.ToString();
+                        }
 
-                    totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
+                        totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
+                    }
                 }
-            }
 
-            operando = true;
-            timer2.Start();
-            UpdateVisor();
+                pausado = false;
+                operando = true;
+                timer2.Start();
+                UpdateVisor();
+            }
         }
 
         private void dataGrid_MouseDown(object sender, MouseEventArgs e)
@@ -191,13 +199,35 @@ namespace Microondas
         /* Botão Para */
         private void buttonPara_Click(object sender, EventArgs e)
         {
-            input = ""; 
-            totalTimeInSeconds = 0;
-            timer2.Stop(); 
-            txtVisor.Text = "00:00";
-            operando = false;
-            indPotencia = 10;
-            preenchAutomatico = false;
+            if (operando)
+            {
+                if (!pausado)
+                {
+                    timer2.Stop();
+                    pausado = true;
+                }
+                else /* já está pausado */
+                {
+                    input = "";
+                    totalTimeInSeconds = 0;
+                    txtVisor.Text = "00:00";
+                    operando = false;
+                    pausado = false;
+                    indPotencia = 10;
+                    txtPotencia.Text = indPotencia.ToString();
+                    preenchAutomatico = false;
+                }
+            }
+            else
+            {
+                input = "";
+                totalTimeInSeconds = 0;
+                txtVisor.Text = "00:00";
+                indPotencia = 10;
+                txtPotencia.Text = indPotencia.ToString();
+                pausado = false;
+                preenchAutomatico = false;
+            }
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
