@@ -1,77 +1,47 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-/*
-namespace Microondas.Properties
+
+namespace Microondas
 {
-    internal class DBProgramas
+    // Classe que representa a estrutura da tabela Receitas
+    public class ProgramaAquecimento
     {
-        public bool Add(DBProgramas dbprogramas)
-        { 
-            var conn = new DBConnection();
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Alimento { get; set; }
+        public int Tempo { get; set; }
+        public int Potencia { get; set; }
+        public string Instrucoes { get; set; }
+        public string Simbolo { get; set; }
+        public bool Padrao { get; set; }
+    }
 
-            string query = @"INSERT INTO dbprogramas(id, nome, alimento, tempo, potencia, instrucoes) VALUES (?,?,?,?,?,?);";
-            
-            var result = conn.Connection.Execute(sql: query, param: dbprogramas);
-
-            return result == 1;
-        }
-
-        //public List<DBProgramas> Get()
-        //{
-            /*
-            var conn = new DBConnection();
-            string query = @"SELECT * FROM dbprogramas";
-
-            var result = conn.Connection.Query<DBProgramas>(sql: query);
-            //return result.Tolist();
-            /*
-
-        }
-
-
-        public bool Update(DBProgramas dbprogramas)
+    // Classe para acessar o banco de dados
+    public class DBProgramas
+    {
+        // Método para adicionar um novo programa
+        public bool Add(ProgramaAquecimento programaAquecimento)
         {
-            //if (programaAquecimento == null || programaAquecimento.Id == 0)
-            //{
-                throw new ArgumentException("Objeto ProgramaAquecimento ou Id inválido.", "Error");
-            //}
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = @"INSERT INTO receitas (nome, alimento, tempo, potencia, instrucoes, simbolo, padrao)
+                                 VALUES (@Nome, @Alimento, @Tempo, @Potencia, @Instrucoes, @Simbolo, @Padrao)";
 
-            /*var conn = new Properties.DBProgramas();
+                var result = dbConnection.Connection.Execute(query, programaAquecimento);
 
-            string query = @"UPDATE public.programaaquecimento
-	                        SET nomeprograma=@NomePrograma, alimento=@Alimento, tempo=@Tempo, potencia=@Potencia, 
-                                simbolo=@Simbolo, instrucoes=@Instrucoes, padrao=false
-	                        WHERE programaaquecimento.id = @Id";
+                return result == 1;
+            }
+        }
 
-            var result = conn.Connection.Execute(sql: query, param: dbprogramas);
-
-            return result == 1;
-            */
-        //}
-
-
-    //}
-//}
-
-/*
- Cadastro de programas
-Id:
-Nome:
-Alimento:
-Tempo:
-Potência:
-Instruções:
-
-
-"INSERT INTO public.microondas(id, nome, alimento, tempo, potencia, instrucoes)
-    VALUES (?,?,?,?,?,?);";
-
-
-
-
- */
+        // Método para listar todos os programas
+        public IEnumerable<ProgramaAquecimento> GetAll()
+        {
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao FROM receitas";
+                return dbConnection.Connection.Query<ProgramaAquecimento>(query);
+            }
+        }
+    }
+}

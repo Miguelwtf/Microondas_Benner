@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microondas.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,13 +14,44 @@ namespace Microondas
     public partial class Form1 : Form
     {
         private string input = "";
-        private Timer countdownTimer;
         private int totalTimeInSeconds;
+        private int indPotencia = 0;
+        private bool operando = false;
 
         public Form1()
         {
             InitializeComponent();
             timer2.Interval = 1000;
+            LoadData();
+
+            //txtPotencia.Text = indPotencia.ToString();
+            txtVisor.Text = "00:00";
+        }
+
+
+        private void LoadData()
+        {
+            try
+            {
+                var dbProgramas = new DBProgramas();
+                var receitas = dbProgramas.GetAll();
+
+                dataGrid.Rows.Clear();
+
+                foreach (var receita in receitas)
+                {
+                    TimeSpan timeSpan = TimeSpan.FromSeconds(receita.Tempo);
+                    string formattedTime = timeSpan.ToString(@"hh\:mm\:ss");
+
+                    dataGrid.Rows.Add(receita.Id, receita.Nome, receita.Alimento, formattedTime, receita.Potencia, receita.Simbolo, receita.Padrao, receita.Instrucoes);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /* Atualiza o Visor */
@@ -71,9 +103,26 @@ namespace Microondas
             string paddedInput = input.PadLeft(4, '0');
             int minutos = int.Parse(paddedInput.Substring(0, 2));
             int segundos = int.Parse(paddedInput.Substring(2, 2));
-            totalTimeInSeconds = (minutos * 60) + segundos;
+            int novoTempoEmSegundos = (minutos * 60) + segundos;
 
-            timer2.Start();
+            if (operando)
+            {
+                totalTimeInSeconds += 30;
+            }
+            else
+            {
+                if (indPotencia == 0)
+                {
+                    indPotencia = 10;
+                    txtPotencia.Text = indPotencia.ToString();
+                } 
+
+                totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
+                operando = true;
+                timer2.Start();
+            }
+
+            UpdateVisor();
         }
 
         /* Botão Para */
@@ -82,7 +131,8 @@ namespace Microondas
             input = ""; 
             totalTimeInSeconds = 0;
             timer2.Stop(); 
-            txtVisor.Text = "00:00"; 
+            txtVisor.Text = "00:00";
+            operando = false;
         }
         
         private void buttonZero_Click(object sender, EventArgs e)
@@ -159,6 +209,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonNove_Click(object sender, EventArgs e)
         {
             if (input.Length < 4)
@@ -167,6 +218,30 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
+        private void btnAumenta_Click(object sender, EventArgs e)
+        {
+            if (indPotencia < 10)
+            {
+                indPotencia++;
+                txtPotencia.Text = indPotencia.ToString();
+            }
+        }
+
+        private void btnDiminui_Click(object sender, EventArgs e)
+        {
+            if (indPotencia > 1)
+            {
+                indPotencia--;
+                txtPotencia.Text = indPotencia.ToString();
+            }
+            else if (indPotencia == 0)
+            {
+                indPotencia = 1;
+                txtPotencia.Text = indPotencia.ToString();
+            }
+        }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {

@@ -13,7 +13,7 @@ namespace Microondas.Properties
 
         public DBConnection()
         {
-            Connection = new NpgsqlConnection("Server=localhost;Port=5432;Database=microondas;User Id=postgres;Password=123;");
+            Connection = new NpgsqlConnection("Server=localhost;Port=5432;Database=Microondas;User Id=postgres;Password=123;");
             Connection.Open();
         }
 
