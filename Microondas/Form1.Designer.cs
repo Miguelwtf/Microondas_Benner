@@ -59,6 +59,7 @@
             this.btnAumenta = new System.Windows.Forms.Button();
             this.btnNovo = new System.Windows.Forms.Button();
             this.btnExclui = new System.Windows.Forms.Button();
+            this.btnEdita = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -262,6 +263,7 @@
             this.dataGrid.Size = new System.Drawing.Size(894, 272);
             this.dataGrid.TabIndex = 16;
             this.dataGrid.Click += new System.EventHandler(this.dataGrid_Click);
+            this.dataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseDown);
             // 
             // id
             // 
@@ -354,7 +356,7 @@
             // 
             // btnExclui
             // 
-            this.btnExclui.Location = new System.Drawing.Point(93, 290);
+            this.btnExclui.Location = new System.Drawing.Point(174, 290);
             this.btnExclui.Name = "btnExclui";
             this.btnExclui.Size = new System.Drawing.Size(75, 23);
             this.btnExclui.TabIndex = 21;
@@ -362,11 +364,22 @@
             this.btnExclui.UseVisualStyleBackColor = true;
             this.btnExclui.Click += new System.EventHandler(this.btnExclui_Click);
             // 
+            // btnEdita
+            // 
+            this.btnEdita.Location = new System.Drawing.Point(93, 290);
+            this.btnEdita.Name = "btnEdita";
+            this.btnEdita.Size = new System.Drawing.Size(75, 23);
+            this.btnEdita.TabIndex = 22;
+            this.btnEdita.Text = "Edita";
+            this.btnEdita.UseVisualStyleBackColor = true;
+            this.btnEdita.Click += new System.EventHandler(this.btnEdita_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(914, 529);
+            this.Controls.Add(this.btnEdita);
             this.Controls.Add(this.btnExclui);
             this.Controls.Add(this.btnNovo);
             this.Controls.Add(this.btnAumenta);
@@ -431,6 +444,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn instrucoes;
         private System.Windows.Forms.Button btnNovo;
         private System.Windows.Forms.Button btnExclui;
+        private System.Windows.Forms.Button btnEdita;
     }
 }
 

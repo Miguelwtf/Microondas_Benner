@@ -34,12 +34,44 @@ namespace Microondas
             }
         }
 
+        public bool Update(ProgramaAquecimento programaAquecimento)
+        {
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = @"UPDATE receitas
+                                 SET nome = @Nome,
+                                     alimento = @Alimento,
+                                     tempo = @Tempo,
+                                     potencia = @Potencia,
+                                     instrucoes = @Instrucoes,
+                                     simbolo = @Simbolo,
+                                     padrao = @Padrao
+                                 WHERE id = @Id";
+
+                var result = dbConnection.Connection.Execute(query, programaAquecimento);
+
+                return result == 1;
+            }
+        }
+
         public IEnumerable<ProgramaAquecimento> GetAll()
         {
             using (var dbConnection = new Properties.DBConnection())
             {
                 string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao FROM receitas";
                 return dbConnection.Connection.Query<ProgramaAquecimento>(query);
+            }
+        }
+
+        public ProgramaAquecimento GetById(int id)
+        {
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao 
+                         FROM receitas 
+                         WHERE id = @Id";
+
+                return dbConnection.Connection.QueryFirstOrDefault<ProgramaAquecimento>(query, new { Id = id });
             }
         }
 

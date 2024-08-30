@@ -12,9 +12,39 @@ namespace Microondas.Model
 {
     public partial class FormCadastro : Form
     {
-        public FormCadastro()
+
+        private bool IsEditMode { get; set; }
+        private int RecordId { get; set; }
+
+        public FormCadastro(int recordId = 0)
         {
             InitializeComponent();
+
+            if (recordId > 0)
+            {
+                IsEditMode = true;
+                RecordId = recordId;
+                CarregarDados();
+            }
+        }
+
+        private void CarregarDados()
+        {
+            var dbProgramas = new DBProgramas();
+            var programa = dbProgramas.GetById(RecordId);
+
+            if (programa != null)
+            {
+                txtNomePrograma.Text = programa.Nome;
+                txtAlimento.Text = programa.Alimento;
+                txtPotencia.Text = programa.Potencia.ToString();
+                txtSimbolo.Text = programa.Simbolo;
+                txtInstrucoes.Text = programa.Instrucoes;
+
+                // Convertendo tempo de segundos para formato MM:SS
+                TimeSpan timeSpan = TimeSpan.FromSeconds(programa.Tempo);
+                txtTempo.Text = timeSpan.ToString(@"mm\:ss");
+            }
         }
 
         private void btnSalvar_Click(object sender, EventArgs e)
@@ -40,25 +70,43 @@ namespace Microondas.Model
             };
 
             var dbProgramas = new DBProgramas();
-            var todosProgramas = dbProgramas.GetAll();
-            foreach (var p in todosProgramas)
-            {
-                if (p.Simbolo == programa.Simbolo)
-                {
-                    MessageBox.Show("Símbolo já utilizado. Por favor, escolha outro.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
 
-            if (dbProgramas.Add(programa))
+            if (IsEditMode)
             {
-                MessageBox.Show("Programa de aquecimento cadastrado com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close(); 
+                programa.Id = RecordId;
+
+                if (dbProgramas.Update(programa))
+                {
+                    MessageBox.Show("Programa de aquecimento atualizado com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Erro ao atualizar o programa de aquecimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Erro ao cadastrar o programa de aquecimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var todosProgramas = dbProgramas.GetAll();
+                foreach (var p in todosProgramas)
+                {
+                    if (p.Simbolo == programa.Simbolo)
+                    {
+                        MessageBox.Show("Símbolo já utilizado. Por favor, escolha outro.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                if (dbProgramas.Add(programa))
+                {
+                    MessageBox.Show("Programa de aquecimento cadastrado com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Erro ao cadastrar o programa de aquecimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+
+            this.Close();
         }
 
 

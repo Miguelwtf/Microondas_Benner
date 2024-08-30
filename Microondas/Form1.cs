@@ -110,33 +110,67 @@ namespace Microondas
         /* Botão Liga */
         private void buttonLiga_Click(object sender, EventArgs e)
         {
-            string paddedInput = input.PadLeft(4, '0');
-            int minutos = int.Parse(paddedInput.Substring(0, 2));
-            int segundos = int.Parse(paddedInput.Substring(2, 2));
-            int novoTempoEmSegundos = (minutos * 60) + segundos;
-
-            /* confirmar necessidade de             if (dataGrid.SelectedRows.Count > 0) (REALIZAR TESTES) */
-            int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
-            bool Padrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
-
-            if (operando)
+            // Verifica se há uma linha selecionada no dataGrid
+            if (dataGrid.SelectedRows.Count > 0)
             {
-                totalTimeInSeconds += 30;
+                var selectedRow = dataGrid.SelectedRows[0];
+                var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
+                var potenciaCellValue = selectedRow.Cells["Potencia"].Value?.ToString();
+
+                if (tempoCellValue != null)
+                {
+                    int minutos = int.Parse(tempoCellValue.Substring(0, 2));
+                    int segundos = int.Parse(tempoCellValue.Substring(3, 2));
+                    totalTimeInSeconds = (minutos * 60) + segundos;
+
+                    if (int.TryParse(potenciaCellValue, out int potencia))
+                    {
+                        indPotencia = potencia;
+                        txtPotencia.Text = indPotencia.ToString();
+                    }
+                }
             }
             else
             {
-                if (indPotencia == 0 && !Padrao)
-                {
-                    indPotencia = 10;
-                    txtPotencia.Text = indPotencia.ToString();
-                } 
+                // Caso não haja uma linha selecionada, usa 30 segundos como tempo padrão
+                string paddedInput = input.PadLeft(4, '0');
+                int minutos = int.Parse(paddedInput.Substring(0, 2));
+                int segundos = int.Parse(paddedInput.Substring(2, 2));
+                int novoTempoEmSegundos = (minutos * 60) + segundos;
 
-                totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
-                operando = true;
-                timer2.Start();
+                if (operando)
+                {
+                    totalTimeInSeconds += 30;
+                }
+                else
+                {
+                    if (indPotencia == 0)
+                    {
+                        indPotencia = 10;
+                        txtPotencia.Text = indPotencia.ToString();
+                    }
+
+                    totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
+                }
             }
 
+            operando = true;
+            timer2.Start();
             UpdateVisor();
+        }
+
+        private void dataGrid_MouseDown(object sender, MouseEventArgs e)
+        {
+            var hitTestInfo = dataGrid.HitTest(e.X, e.Y);
+
+            if (hitTestInfo.Type != DataGridViewHitTestType.Cell)
+            {
+                dataGrid.ClearSelection();
+                input = "";
+                totalTimeInSeconds = 0;
+                txtVisor.Text = "00:00";
+                indPotencia = 10;
+            }
         }
 
         private void btnNovo_Click(object sender, EventArgs e)
@@ -154,6 +188,7 @@ namespace Microondas
             timer2.Stop(); 
             txtVisor.Text = "00:00";
             operando = false;
+            indPotencia = 10;
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
@@ -168,6 +203,7 @@ namespace Microondas
                 if (int.TryParse(potenciaCellValue?.ToString(), out potencia))
                 {
                     txtPotencia.Text = potencia.ToString();
+                    indPotencia = potencia;
                 }
                 else
                 {
@@ -334,5 +370,26 @@ namespace Microondas
 
         }
 
+        private void btnEdita_Click(object sender, EventArgs e)
+        {
+            if (dataGrid.SelectedRows.Count > 0)
+            {
+                int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
+
+                bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
+
+                if (isPadrao)
+                {
+                    MessageBox.Show("Este item é um padrão e não pode ser editado.", "Exclusão Não Permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+                    FormCadastro formCadastro = new FormCadastro(selectedId);
+                    formCadastro.ShowDialog();
+                }
+                LoadData();
+            }
+        }
     }
 }
