@@ -66,6 +66,7 @@
             this.txtSimbolo.Name = "txtSimbolo";
             this.txtSimbolo.Size = new System.Drawing.Size(31, 20);
             this.txtSimbolo.TabIndex = 2;
+            this.txtSimbolo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSimbolo_KeyPress);
             // 
             // txtPotencia
             // 
@@ -74,6 +75,7 @@
             this.txtPotencia.Name = "txtPotencia";
             this.txtPotencia.Size = new System.Drawing.Size(31, 20);
             this.txtPotencia.TabIndex = 3;
+            this.txtPotencia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPotencia_KeyPress);
             // 
             // txtTempo
             // 
@@ -81,6 +83,7 @@
             this.txtTempo.Name = "txtTempo";
             this.txtTempo.Size = new System.Drawing.Size(65, 20);
             this.txtTempo.TabIndex = 4;
+            this.txtTempo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTempo_KeyPress);
             // 
             // label1
             // 

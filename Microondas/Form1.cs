@@ -44,10 +44,19 @@ namespace Microondas
                     TimeSpan timeSpan = TimeSpan.FromSeconds(receita.Tempo);
                     string formattedTime = timeSpan.ToString(@"hh\:mm\:ss");
 
-                    dataGrid.Rows.Add(receita.Id, receita.Nome, receita.Alimento, formattedTime, receita.Potencia, receita.Simbolo, receita.Padrao, receita.Instrucoes);
+                    int rowIndex = dataGrid.Rows.Add(receita.Id, receita.Nome, receita.Alimento, formattedTime, receita.Potencia, receita.Simbolo, receita.Padrao, receita.Instrucoes);
+
+                    DataGridViewRow row = dataGrid.Rows[rowIndex];
+
+                    if (!receita.Padrao)
+                    {
+                        row.DefaultCellStyle.Font = new Font(dataGrid.Font, FontStyle.Italic);
+                    }
+                    else
+                    {
+
+                    }
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -247,6 +256,44 @@ namespace Microondas
             {
                 indPotencia = 1;
                 txtPotencia.Text = indPotencia.ToString();
+            }
+        }
+
+        private void btnExclui_Click(object sender, EventArgs e)
+        {
+            if (dataGrid.SelectedRows.Count > 0)
+            {
+                int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
+
+                bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
+
+                if (isPadrao)
+                {
+                    MessageBox.Show("Este item é um padrão e não pode ser excluído.", "Exclusão Não Permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; 
+                }
+
+                var result = MessageBox.Show("Tem certeza de que deseja excluir este item?", "Confirmação de Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    var dbProgramas = new DBProgramas();
+
+                    bool isDeleted = dbProgramas.Delete(selectedId);
+
+                    if (isDeleted)
+                    {
+                        dataGrid.Rows.RemoveAt(dataGrid.SelectedRows[0].Index);
+                        MessageBox.Show("Item excluído com sucesso.", "Exclusão", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao excluir o item.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nenhum item selecionado para exclusão.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

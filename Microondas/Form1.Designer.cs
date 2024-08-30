@@ -359,6 +359,7 @@
             this.btnExclui.TabIndex = 21;
             this.btnExclui.Text = "Exclui";
             this.btnExclui.UseVisualStyleBackColor = true;
+            this.btnExclui.Click += new System.EventHandler(this.btnExclui_Click);
             // 
             // Form1
             // 

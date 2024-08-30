@@ -19,7 +19,6 @@ namespace Microondas.Model
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
-            // Valida se todos os campos obrigatórios estão preenchidos
             if (string.IsNullOrWhiteSpace(txtNomePrograma.Text) ||
                 string.IsNullOrWhiteSpace(txtAlimento.Text) ||
                 string.IsNullOrWhiteSpace(txtSimbolo.Text) ||
@@ -30,7 +29,6 @@ namespace Microondas.Model
                 return;
             }
 
-            // Cria o objeto ProgramaAquecimento
             var programa = new ProgramaAquecimento
             {
                 Nome = txtNomePrograma.Text,
@@ -41,7 +39,6 @@ namespace Microondas.Model
                 Instrucoes = txtInstrucoes.Text 
             };
 
-            // Verifica se o símbolo já está em uso
             var dbProgramas = new DBProgramas();
             var todosProgramas = dbProgramas.GetAll();
             foreach (var p in todosProgramas)
@@ -53,11 +50,10 @@ namespace Microondas.Model
                 }
             }
 
-            // Adiciona o novo programa ao banco de dados
             if (dbProgramas.Add(programa))
             {
                 MessageBox.Show("Programa de aquecimento cadastrado com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close(); // Fecha o formulário após salvar
+                this.Close(); 
             }
             else
             {
@@ -69,11 +65,52 @@ namespace Microondas.Model
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             txtTempo.Text = "";
-            txtPotencia.Text = "";
-            txtNomePrograma.Text = "";
-            txtAlimento.Text = "";
             txtSimbolo.Text = "";
+            txtPotencia.Text = "";
+            txtAlimento.Text = "";
             txtInstrucoes.Text = "";
+            txtNomePrograma.Text = "";
+        }
+
+        private void txtPotencia_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+
+            TextBox textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                int parsedValue;
+                if (int.TryParse(textBox.Text + e.KeyChar, out parsedValue))
+                {
+                    if (parsedValue > 10)
+                    {
+                        textBox.Text = "10";
+                        e.Handled = true; 
+                        textBox.SelectionStart = textBox.Text.Length; 
+                    }
+                }
+            }
+        }
+
+        private void txtSimbolo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+
+            TextBox textBox = sender as TextBox;
+            if (textBox != null && textBox.Text.Length >= 1 && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; 
+            }
+        }
+
+        private void txtTempo_KeyPress(object sender, KeyPressEventArgs e)
+        {
         }
 
 

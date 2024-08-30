@@ -34,13 +34,22 @@ namespace Microondas
             }
         }
 
-        // Método para listar todos os programas
         public IEnumerable<ProgramaAquecimento> GetAll()
         {
             using (var dbConnection = new Properties.DBConnection())
             {
                 string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao FROM receitas";
                 return dbConnection.Connection.Query<ProgramaAquecimento>(query);
+            }
+        }
+
+        public bool Delete(int id)
+        {
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = "DELETE FROM public.receitas WHERE id = @Id";
+                var result = dbConnection.Connection.Execute(query, new { Id = id });
+                return result == 1;
             }
         }
     }
