@@ -47,8 +47,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtPotencia = new System.Windows.Forms.TextBox();
             this.dataGrid = new System.Windows.Forms.DataGridView();
-            this.btnDiminui = new System.Windows.Forms.Button();
-            this.btnAumenta = new System.Windows.Forms.Button();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alimento = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,6 +55,10 @@
             this.simbolo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.padrao = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.instrucoes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnDiminui = new System.Windows.Forms.Button();
+            this.btnAumenta = new System.Windows.Forms.Button();
+            this.btnNovo = new System.Windows.Forms.Button();
+            this.btnExclui = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -260,28 +262,6 @@
             this.dataGrid.Size = new System.Drawing.Size(894, 272);
             this.dataGrid.TabIndex = 16;
             // 
-            // btnDiminui
-            // 
-            this.btnDiminui.Location = new System.Drawing.Point(418, 470);
-            this.btnDiminui.Margin = new System.Windows.Forms.Padding(2);
-            this.btnDiminui.Name = "btnDiminui";
-            this.btnDiminui.Size = new System.Drawing.Size(78, 48);
-            this.btnDiminui.TabIndex = 17;
-            this.btnDiminui.Text = "Diminui";
-            this.btnDiminui.UseVisualStyleBackColor = true;
-            this.btnDiminui.Click += new System.EventHandler(this.btnDiminui_Click);
-            // 
-            // btnAumenta
-            // 
-            this.btnAumenta.Location = new System.Drawing.Point(418, 418);
-            this.btnAumenta.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAumenta.Name = "btnAumenta";
-            this.btnAumenta.Size = new System.Drawing.Size(78, 48);
-            this.btnAumenta.TabIndex = 18;
-            this.btnAumenta.Text = "Aumenta";
-            this.btnAumenta.UseVisualStyleBackColor = true;
-            this.btnAumenta.Click += new System.EventHandler(this.btnAumenta_Click);
-            // 
             // id
             // 
             this.id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
@@ -339,11 +319,54 @@
             this.instrucoes.Name = "instrucoes";
             this.instrucoes.Width = 81;
             // 
+            // btnDiminui
+            // 
+            this.btnDiminui.Location = new System.Drawing.Point(418, 470);
+            this.btnDiminui.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDiminui.Name = "btnDiminui";
+            this.btnDiminui.Size = new System.Drawing.Size(78, 48);
+            this.btnDiminui.TabIndex = 17;
+            this.btnDiminui.Text = "Diminui";
+            this.btnDiminui.UseVisualStyleBackColor = true;
+            this.btnDiminui.Click += new System.EventHandler(this.btnDiminui_Click);
+            // 
+            // btnAumenta
+            // 
+            this.btnAumenta.Location = new System.Drawing.Point(418, 418);
+            this.btnAumenta.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAumenta.Name = "btnAumenta";
+            this.btnAumenta.Size = new System.Drawing.Size(78, 48);
+            this.btnAumenta.TabIndex = 18;
+            this.btnAumenta.Text = "Aumenta";
+            this.btnAumenta.UseVisualStyleBackColor = true;
+            this.btnAumenta.Click += new System.EventHandler(this.btnAumenta_Click);
+            // 
+            // btnNovo
+            // 
+            this.btnNovo.Location = new System.Drawing.Point(12, 290);
+            this.btnNovo.Name = "btnNovo";
+            this.btnNovo.Size = new System.Drawing.Size(75, 23);
+            this.btnNovo.TabIndex = 19;
+            this.btnNovo.Text = "Novo";
+            this.btnNovo.UseVisualStyleBackColor = true;
+            this.btnNovo.Click += new System.EventHandler(this.btnNovo_Click);
+            // 
+            // btnExclui
+            // 
+            this.btnExclui.Location = new System.Drawing.Point(93, 290);
+            this.btnExclui.Name = "btnExclui";
+            this.btnExclui.Size = new System.Drawing.Size(75, 23);
+            this.btnExclui.TabIndex = 21;
+            this.btnExclui.Text = "Exclui";
+            this.btnExclui.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(914, 529);
+            this.Controls.Add(this.btnExclui);
+            this.Controls.Add(this.btnNovo);
             this.Controls.Add(this.btnAumenta);
             this.Controls.Add(this.btnDiminui);
             this.Controls.Add(this.dataGrid);
@@ -363,6 +386,7 @@
             this.Controls.Add(this.btnUm);
             this.Controls.Add(this.buttonZero);
             this.Controls.Add(this.txtVisor);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -403,6 +427,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn simbolo;
         private System.Windows.Forms.DataGridViewTextBoxColumn padrao;
         private System.Windows.Forms.DataGridViewTextBoxColumn instrucoes;
+        private System.Windows.Forms.Button btnNovo;
+        private System.Windows.Forms.Button btnExclui;
     }
 }
 

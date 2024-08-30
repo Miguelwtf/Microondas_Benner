@@ -1,4 +1,5 @@
-﻿using Microondas.Properties;
+﻿using Microondas.Model;
+using Microondas.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -123,6 +124,13 @@ namespace Microondas
             }
 
             UpdateVisor();
+        }
+
+        private void btnNovo_Click(object sender, EventArgs e)
+        {
+            var formCadastro = new FormCadastro();
+            formCadastro.ShowDialog();
+            LoadData();
         }
 
         /* Botão Para */
