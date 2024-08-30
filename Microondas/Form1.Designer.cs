@@ -261,6 +261,7 @@
             this.dataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGrid.Size = new System.Drawing.Size(894, 272);
             this.dataGrid.TabIndex = 16;
+            this.dataGrid.Click += new System.EventHandler(this.dataGrid_Click);
             // 
             // id
             // 

@@ -42,7 +42,7 @@ namespace Microondas
                 foreach (var receita in receitas)
                 {
                     TimeSpan timeSpan = TimeSpan.FromSeconds(receita.Tempo);
-                    string formattedTime = timeSpan.ToString(@"hh\:mm\:ss");
+                    string formattedTime = timeSpan.ToString(@"mm\:ss");
 
                     int rowIndex = dataGrid.Rows.Add(receita.Id, receita.Nome, receita.Alimento, formattedTime, receita.Potencia, receita.Simbolo, receita.Padrao, receita.Instrucoes);
 
@@ -115,13 +115,17 @@ namespace Microondas
             int segundos = int.Parse(paddedInput.Substring(2, 2));
             int novoTempoEmSegundos = (minutos * 60) + segundos;
 
+            /* confirmar necessidade de             if (dataGrid.SelectedRows.Count > 0) (REALIZAR TESTES) */
+            int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
+            bool Padrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
+
             if (operando)
             {
                 totalTimeInSeconds += 30;
             }
             else
             {
-                if (indPotencia == 0)
+                if (indPotencia == 0 && !Padrao)
                 {
                     indPotencia = 10;
                     txtPotencia.Text = indPotencia.ToString();
@@ -151,7 +155,34 @@ namespace Microondas
             txtVisor.Text = "00:00";
             operando = false;
         }
-        
+
+        private void dataGrid_Click(object sender, EventArgs e)
+        {
+            // Verifica se há linhas selecionadas
+            if (dataGrid.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGrid.SelectedRows[0];
+                var potenciaCellValue = selectedRow.Cells["Potencia"].Value;
+                int potencia;
+
+                if (int.TryParse(potenciaCellValue?.ToString(), out potencia))
+                {
+                    txtPotencia.Text = potencia.ToString();
+                }
+                else
+                {
+                    txtPotencia.Text = "Potência inválida";
+                }
+
+                // Obtém o valor da célula Tempo, que está no formato MM:SS
+                var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
+
+                // Atribui o valor ao txtVisor
+                txtVisor.Text = tempoCellValue ?? "Tempo inválido";
+
+            }
+        }
+
         private void buttonZero_Click(object sender, EventArgs e)
         {
             if (input.Length < 4)
