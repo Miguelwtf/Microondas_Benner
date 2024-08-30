@@ -102,6 +102,7 @@ namespace Microondas
             {
                 totalTimeInSeconds--;
                 UpdateVisor();
+                AtualizarProgresso();
             }
             else
             {
@@ -175,6 +176,11 @@ namespace Microondas
             }
         }
 
+        private void AtualizarProgresso()
+        {
+        }
+
+
         private void dataGrid_MouseDown(object sender, MouseEventArgs e)
         {
             var hitTestInfo = dataGrid.HitTest(e.X, e.Y);
@@ -186,6 +192,9 @@ namespace Microondas
                 totalTimeInSeconds = 0;
                 txtVisor.Text = "00:00";
                 indPotencia = 10;
+                txtPotencia.Text = indPotencia.ToString();
+                preenchAutomatico = false;
+
             }
         }
 
