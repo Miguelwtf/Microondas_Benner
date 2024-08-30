@@ -54,15 +54,7 @@ namespace Microondas
             }
         }
 
-        public IEnumerable<ProgramaAquecimento> GetAll()
-        {
-            using (var dbConnection = new Properties.DBConnection())
-            {
-                string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao FROM receitas";
-                return dbConnection.Connection.Query<ProgramaAquecimento>(query);
-            }
-        }
-
+        // Método para obter um programa específico pelo ID
         public ProgramaAquecimento GetById(int id)
         {
             using (var dbConnection = new Properties.DBConnection())
@@ -72,6 +64,16 @@ namespace Microondas
                          WHERE id = @Id";
 
                 return dbConnection.Connection.QueryFirstOrDefault<ProgramaAquecimento>(query, new { Id = id });
+            }
+        }
+
+
+        public IEnumerable<ProgramaAquecimento> GetAll()
+        {
+            using (var dbConnection = new Properties.DBConnection())
+            {
+                string query = @"SELECT id, nome, alimento, tempo, potencia, instrucoes, simbolo, padrao FROM receitas";
+                return dbConnection.Connection.Query<ProgramaAquecimento>(query);
             }
         }
 

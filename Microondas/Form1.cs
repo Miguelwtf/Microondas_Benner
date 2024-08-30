@@ -18,6 +18,7 @@ namespace Microondas
         private int totalTimeInSeconds;
         private int indPotencia = 0;
         private bool operando = false;
+        private bool preenchAutomatico = false;
 
         public Form1()
         {
@@ -110,12 +111,14 @@ namespace Microondas
         /* Botão Liga */
         private void buttonLiga_Click(object sender, EventArgs e)
         {
-            // Verifica se há uma linha selecionada no dataGrid
+                // Verifica se há uma linha selecionada no dataGrid
             if (dataGrid.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGrid.SelectedRows[0];
                 var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
                 var potenciaCellValue = selectedRow.Cells["Potencia"].Value?.ToString();
+                int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
+                bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
 
                 if (tempoCellValue != null)
                 {
@@ -128,6 +131,11 @@ namespace Microondas
                         indPotencia = potencia;
                         txtPotencia.Text = indPotencia.ToString();
                     }
+                }
+
+                if (operando && !isPadrao)
+                {
+                    totalTimeInSeconds += 30;
                 }
             }
             else
@@ -189,6 +197,7 @@ namespace Microondas
             txtVisor.Text = "00:00";
             operando = false;
             indPotencia = 10;
+            preenchAutomatico = false;
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
@@ -202,11 +211,12 @@ namespace Microondas
 
                 if (int.TryParse(potenciaCellValue?.ToString(), out potencia))
                 {
-                    txtPotencia.Text = potencia.ToString();
                     indPotencia = potencia;
+                    txtPotencia.Text = potencia.ToString();
                 }
                 else
                 {
+                    indPotencia = 10;
                     txtPotencia.Text = "Potência inválida";
                 }
 
@@ -216,12 +226,13 @@ namespace Microondas
                 // Atribui o valor ao txtVisor
                 txtVisor.Text = tempoCellValue ?? "Tempo inválido";
 
+                preenchAutomatico = true;
             }
         }
 
         private void buttonZero_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "0";
                 UpdateVisor();
@@ -230,7 +241,7 @@ namespace Microondas
 
         private void buttonUm_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4) 
+            if (input.Length < 4 && !preenchAutomatico) 
             {
                 input += "1"; 
                 UpdateVisor(); 
@@ -239,7 +250,7 @@ namespace Microondas
 
         private void buttonDois_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "2";
                 UpdateVisor();
@@ -247,7 +258,7 @@ namespace Microondas
         }
         private void buttonTres_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "3";
                 UpdateVisor();
@@ -255,7 +266,7 @@ namespace Microondas
         }
         private void buttonQuatro_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "4";
                 UpdateVisor();
@@ -263,7 +274,7 @@ namespace Microondas
         }
         private void buttonCinco_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "5";
                 UpdateVisor();
@@ -271,7 +282,7 @@ namespace Microondas
         }
         private void buttonSeis_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "6";
                 UpdateVisor();
@@ -279,7 +290,7 @@ namespace Microondas
         }
         private void buttonSete_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "7";
                 UpdateVisor();
@@ -287,7 +298,7 @@ namespace Microondas
         }
         private void buttonOito_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "8";
                 UpdateVisor();
@@ -296,7 +307,7 @@ namespace Microondas
 
         private void buttonNove_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4)
+            if (input.Length < 4 && !preenchAutomatico)
             {
                 input += "9";
                 UpdateVisor();
@@ -305,24 +316,30 @@ namespace Microondas
 
         private void btnAumenta_Click(object sender, EventArgs e)
         {
-            if (indPotencia < 10)
+            if (!preenchAutomatico)
             {
-                indPotencia++;
-                txtPotencia.Text = indPotencia.ToString();
+                if (indPotencia < 10)
+                {
+                    indPotencia++;
+                    txtPotencia.Text = indPotencia.ToString();
+                }
             }
         }
 
         private void btnDiminui_Click(object sender, EventArgs e)
         {
-            if (indPotencia > 1)
-            {
-                indPotencia--;
-                txtPotencia.Text = indPotencia.ToString();
-            }
-            else if (indPotencia == 0)
-            {
-                indPotencia = 1;
-                txtPotencia.Text = indPotencia.ToString();
+            if (!preenchAutomatico)
+            { 
+                if (indPotencia > 1)
+                {
+                    indPotencia--;
+                    txtPotencia.Text = indPotencia.ToString();
+                }
+                else if (indPotencia == 0)
+                {
+                    indPotencia = 1;
+                    txtPotencia.Text = indPotencia.ToString();
+                }
             }
         }
 

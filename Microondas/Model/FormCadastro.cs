@@ -75,6 +75,26 @@ namespace Microondas.Model
             {
                 programa.Id = RecordId;
 
+                if (programa.Nome == "Aquecimento")
+                {
+                    // Converte o tempo informado para segundos
+                    if (!int.TryParse(txtTempo.Text, out int tempoEmSegundos))
+                    {
+                        MessageBox.Show("Tempo inválido. Por favor, insira um valor numérico válido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Verifica se o tempo está dentro dos limites permitidos (1 segundo a 2 minutos)
+                    if (tempoEmSegundos < 1 || tempoEmSegundos > 120)
+                    {
+                        MessageBox.Show("O tempo deve estar entre 1 segundo e 2 minutos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Atribui o tempo convertido ao programa
+                    programa.Tempo = tempoEmSegundos;
+                }
+
                 if (dbProgramas.Update(programa))
                 {
                     MessageBox.Show("Programa de aquecimento atualizado com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
