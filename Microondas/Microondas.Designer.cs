@@ -1,4 +1,6 @@
-﻿namespace Microondas
+﻿using System;
+
+namespace Microondas
 {
     partial class Microondas
     {

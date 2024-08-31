@@ -104,19 +104,19 @@
     <Compile Include="Microondas.Designer.cs">
       <DependentUpon>Microondas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\MicroondasCadastro.cs">
+    <Compile Include="Models\MicroondasCadastro.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\MicroondasCadastro.Designer.cs">
+    <Compile Include="Models\MicroondasCadastro.Designer.cs">
       <DependentUpon>MicroondasCadastro.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\ListaProgramas.cs" />
+    <Compile Include="Models\ProgramaAquecimento.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Microondas.resx">
       <DependentUpon>Microondas.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Model\MicroondasCadastro.resx">
+    <EmbeddedResource Include="Models\MicroondasCadastro.resx">
       <DependentUpon>MicroondasCadastro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -124,8 +124,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\DBConnection.cs" />
-    <Compile Include="Properties\DBProgramas.cs" />
+    <Compile Include="DataAccess\DBConnection.cs" />
+    <Compile Include="DataAccess\DBProgramas.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>

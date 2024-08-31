@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microondas.DataAccess;
+
 
 namespace Microondas
 {
@@ -16,18 +18,24 @@ namespace Microondas
     {
         private string input = "";
         private string progresso = "";
+        
         private int totalTempoSegundos;
         private int indPotencia = 0;
-        private bool operando = false;
+        
+        private bool isOperando = false;
         private bool preenchAutomatico = false;
-        private bool pausado = false;
+        private bool isPausado = false;
+        
+        private const int defaultPotencia = 10;
+        private const string defaultVisor = "00:00";
+        private const string defaultSimbolo = ".";
 
         public Microondas()
         {
             InitializeComponent();
             timer.Interval = 1000;
             LoadData();
-            txtVisor.Text = "00:00";
+            txtVisor.Text = defaultVisor;
         }
 
         /* Carrega dados na dataGrid */
@@ -86,7 +94,7 @@ namespace Microondas
                 }
                 else
                 {
-                    txtVisor.Text = "00:00"; 
+                    txtVisor.Text = defaultVisor; 
                 }
             }
         }
@@ -133,10 +141,10 @@ namespace Microondas
         /* Botão Liga */
         private void buttonLiga_Click(object sender, EventArgs e)
         {
-            if (pausado)
+            if (isPausado)
             {
                 timer.Start();
-                pausado = false;
+                isPausado = false;
             }
             else
             {
@@ -161,7 +169,7 @@ namespace Microondas
                         }
                     }
 
-                    if (operando && !isPadrao)
+                    if (isOperando && !isPadrao)
                     {
                         totalTempoSegundos += 30;
                     }
@@ -173,7 +181,7 @@ namespace Microondas
                     int segundos = int.Parse(paddedInput.Substring(2, 2));
                     int novoTempoEmSegundos = (minutos * 60) + segundos;
 
-                    if (operando)
+                    if (isOperando)
                     {
                         totalTempoSegundos += 30;
                     }
@@ -181,7 +189,7 @@ namespace Microondas
                     {
                         if (indPotencia == 0)
                         {
-                            indPotencia = 10;
+                            indPotencia = defaultPotencia;
                             txtPotencia.Text = indPotencia.ToString();
                         }
 
@@ -189,8 +197,8 @@ namespace Microondas
                     }
                 }
 
-                pausado = false;
-                operando = true;
+                isPausado = false;
+                isOperando = true;
                 timer.Start();
                 UpdateVisor();
             }
@@ -205,8 +213,8 @@ namespace Microondas
                 dataGrid.ClearSelection();
                 input = "";
                 totalTempoSegundos = 0;
-                txtVisor.Text = "00:00";
-                indPotencia = 10;
+                txtVisor.Text = defaultVisor;
+                indPotencia = defaultPotencia;
                 txtPotencia.Text = indPotencia.ToString();
                 preenchAutomatico = false;
             }
@@ -222,21 +230,21 @@ namespace Microondas
         /* Botão Para */
         private void buttonPara_Click(object sender, EventArgs e)
         {
-            if (operando)
+            if (isOperando)
             {
-                if (!pausado)
+                if (!isPausado)
                 {
                     timer.Stop();
-                    pausado = true;
+                    isPausado = true;
                 }
                 else 
                 {
                     input = "";
                     totalTempoSegundos = 0;
-                    txtVisor.Text = "00:00";
-                    operando = false;
-                    pausado = false;
-                    indPotencia = 10;
+                    txtVisor.Text = defaultVisor;
+                    isOperando = false;
+                    isPausado = false;
+                    indPotencia = defaultPotencia;
                     txtPotencia.Text = indPotencia.ToString();
                     preenchAutomatico = false;
                     txtProgresso.Text = "";
@@ -246,10 +254,10 @@ namespace Microondas
             {
                 input = "";
                 totalTempoSegundos = 0;
-                txtVisor.Text = "00:00";
-                indPotencia = 10;
+                txtVisor.Text = defaultVisor;
+                indPotencia = defaultPotencia;
                 txtPotencia.Text = indPotencia.ToString();
-                pausado = false;
+                isPausado = false;
                 preenchAutomatico = false;
                 txtProgresso.Text = "";
             }
@@ -270,7 +278,7 @@ namespace Microondas
                 }
                 else
                 {
-                    indPotencia = 10;
+                    indPotencia = defaultPotencia;
                     txtPotencia.Text = "Potência inválida";
                 }
 

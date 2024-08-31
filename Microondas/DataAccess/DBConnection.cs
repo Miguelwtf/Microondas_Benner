@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microondas.Properties
+namespace Microondas.DataAccess
 {
     internal class DBConnection : IDisposable
     {
