@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace Microondas.Model
 {
-    public partial class FormCadastro : Form
+    public partial class MicroondasCadastro : Form
     {
 
         private bool IsEditMode { get; set; }
         private int RecordId { get; set; }
 
-        public FormCadastro(int recordId = 0)
+        public MicroondasCadastro(int recordId = 0)
         {
             InitializeComponent();
 
@@ -41,7 +41,6 @@ namespace Microondas.Model
                 txtSimbolo.Text = programa.Simbolo;
                 txtInstrucoes.Text = programa.Instrucoes;
 
-                // Convertendo tempo de segundos para formato MM:SS
                 TimeSpan timeSpan = TimeSpan.FromSeconds(programa.Tempo);
                 txtTempo.Text = timeSpan.ToString(@"mm\:ss");
             }
@@ -66,7 +65,7 @@ namespace Microondas.Model
                 Potencia = potencia,
                 Tempo = tempo,
                 Simbolo = txtSimbolo.Text,
-                Instrucoes = txtInstrucoes.Text 
+                Instrucoes = txtInstrucoes.Text
             };
 
             var dbProgramas = new DBProgramas();
@@ -77,21 +76,18 @@ namespace Microondas.Model
 
                 if (programa.Nome == "Aquecimento")
                 {
-                    // Converte o tempo informado para segundos
                     if (!int.TryParse(txtTempo.Text, out int tempoEmSegundos))
                     {
                         MessageBox.Show("Tempo inválido. Por favor, insira um valor numérico válido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    // Verifica se o tempo está dentro dos limites permitidos (1 segundo a 2 minutos)
                     if (tempoEmSegundos < 1 || tempoEmSegundos > 120)
                     {
                         MessageBox.Show("O tempo deve estar entre 1 segundo e 2 minutos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    // Atribui o tempo convertido ao programa
                     programa.Tempo = tempoEmSegundos;
                 }
 
@@ -182,7 +178,7 @@ namespace Microondas.Model
         }
 
 
-        private void FormCadastro_Load(object sender, EventArgs e)
+        private void MicroondasCadastro_Load(object sender, EventArgs e)
         {
 
         }

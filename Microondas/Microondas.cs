@@ -12,26 +12,25 @@ using System.Windows.Forms;
 
 namespace Microondas
 {
-    public partial class Form1 : Form
+    public partial class Microondas : Form
     {
         private string input = "";
-        private int totalTimeInSeconds;
+        private string progresso = "";
+        private int totalTempoSegundos;
         private int indPotencia = 0;
         private bool operando = false;
         private bool preenchAutomatico = false;
         private bool pausado = false;
 
-        public Form1()
+        public Microondas()
         {
             InitializeComponent();
-            timer2.Interval = 1000;
+            timer.Interval = 1000;
             LoadData();
-
-            //txtPotencia.Text = indPotencia.ToString();
             txtVisor.Text = "00:00";
         }
 
-
+        /* Carrega dados na dataGrid */
         private void LoadData()
         {
             try
@@ -69,11 +68,10 @@ namespace Microondas
         /* Atualiza o Visor */
         private void UpdateVisor()
         {
-            if (timer2.Enabled)
+            if (timer.Enabled)
             {
-                int minutos = totalTimeInSeconds / 60;
-                int segundos = totalTimeInSeconds % 60;
-
+                int minutos = totalTempoSegundos / 60;
+                int segundos = totalTempoSegundos % 60;
                 txtVisor.Text = $"{minutos:D2}:{segundos:D2}";
             }
             else
@@ -84,7 +82,6 @@ namespace Microondas
 
                     int minutos = int.Parse(paddedInput.Substring(0, 2));
                     int segundos = int.Parse(paddedInput.Substring(2, 2));
-
                     txtVisor.Text = $"{minutos:D2}:{segundos:D2}";
                 }
                 else
@@ -94,19 +91,42 @@ namespace Microondas
             }
         }
 
-
-        /* Counter Tick */
-        private void timer2_Tick(object sender, EventArgs e)
+        /* Timer */
+        private void timer_Tick(object sender, EventArgs e)
         {
-            if (totalTimeInSeconds > 0)
+            string simbolo;
+            int potencia;
+
+            if (totalTempoSegundos > 0)
             {
-                totalTimeInSeconds--;
+                totalTempoSegundos--;
                 UpdateVisor();
-                AtualizarProgresso();
+
+                if (dataGrid.SelectedRows.Count > 0)
+                {
+                    var selectedRow = dataGrid.SelectedRows[0];
+                    simbolo = selectedRow.Cells["Simbolo"].Value?.ToString() ?? ".";
+                    potencia = int.Parse(selectedRow.Cells["Potencia"].Value.ToString());
+                }
+                else
+                {
+                    simbolo = ".";
+                    potencia = indPotencia;
+                }
+
+                StringBuilder progresso = new StringBuilder(txtProgresso.Text);
+
+                for (int j = 0; j < potencia; j++)
+                {
+                    progresso.Append(simbolo);
+                }
+                progresso.Append(" ");
+                txtProgresso.Text = progresso.ToString();
             }
             else
             {
-                timer2.Stop();
+                timer.Stop();
+                txtProgresso.Text = "Aquecimento concluído";
             }
         }
 
@@ -115,7 +135,7 @@ namespace Microondas
         {
             if (pausado)
             {
-                timer2.Start();
+                timer.Start();
                 pausado = false;
             }
             else
@@ -132,7 +152,7 @@ namespace Microondas
                     {
                         int minutos = int.Parse(tempoCellValue.Substring(0, 2));
                         int segundos = int.Parse(tempoCellValue.Substring(3, 2));
-                        totalTimeInSeconds = (minutos * 60) + segundos;
+                        totalTempoSegundos = (minutos * 60) + segundos;
 
                         if (int.TryParse(potenciaCellValue, out int potencia))
                         {
@@ -143,7 +163,7 @@ namespace Microondas
 
                     if (operando && !isPadrao)
                     {
-                        totalTimeInSeconds += 30;
+                        totalTempoSegundos += 30;
                     }
                 }
                 else
@@ -155,7 +175,7 @@ namespace Microondas
 
                     if (operando)
                     {
-                        totalTimeInSeconds += 30;
+                        totalTempoSegundos += 30;
                     }
                     else
                     {
@@ -165,21 +185,16 @@ namespace Microondas
                             txtPotencia.Text = indPotencia.ToString();
                         }
 
-                        totalTimeInSeconds = Math.Max(novoTempoEmSegundos, 30);
+                        totalTempoSegundos = Math.Max(novoTempoEmSegundos, 30);
                     }
                 }
 
                 pausado = false;
                 operando = true;
-                timer2.Start();
+                timer.Start();
                 UpdateVisor();
             }
         }
-
-        private void AtualizarProgresso()
-        {
-        }
-
 
         private void dataGrid_MouseDown(object sender, MouseEventArgs e)
         {
@@ -189,19 +204,18 @@ namespace Microondas
             {
                 dataGrid.ClearSelection();
                 input = "";
-                totalTimeInSeconds = 0;
+                totalTempoSegundos = 0;
                 txtVisor.Text = "00:00";
                 indPotencia = 10;
                 txtPotencia.Text = indPotencia.ToString();
                 preenchAutomatico = false;
-
             }
         }
 
         private void btnNovo_Click(object sender, EventArgs e)
         {
-            var formCadastro = new FormCadastro();
-            formCadastro.ShowDialog();
+            var MicroondasCadastro = new MicroondasCadastro();
+            MicroondasCadastro.ShowDialog();
             LoadData();
         }
 
@@ -212,36 +226,37 @@ namespace Microondas
             {
                 if (!pausado)
                 {
-                    timer2.Stop();
+                    timer.Stop();
                     pausado = true;
                 }
-                else /* já está pausado */
+                else 
                 {
                     input = "";
-                    totalTimeInSeconds = 0;
+                    totalTempoSegundos = 0;
                     txtVisor.Text = "00:00";
                     operando = false;
                     pausado = false;
                     indPotencia = 10;
                     txtPotencia.Text = indPotencia.ToString();
                     preenchAutomatico = false;
+                    txtProgresso.Text = "";
                 }
             }
             else
             {
                 input = "";
-                totalTimeInSeconds = 0;
+                totalTempoSegundos = 0;
                 txtVisor.Text = "00:00";
                 indPotencia = 10;
                 txtPotencia.Text = indPotencia.ToString();
                 pausado = false;
                 preenchAutomatico = false;
+                txtProgresso.Text = "";
             }
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
         {
-            // Verifica se há linhas selecionadas
             if (dataGrid.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGrid.SelectedRows[0];
@@ -259,10 +274,8 @@ namespace Microondas
                     txtPotencia.Text = "Potência inválida";
                 }
 
-                // Obtém o valor da célula Tempo, que está no formato MM:SS
                 var tempoCellValue = selectedRow.Cells["Tempo"].Value?.ToString();
 
-                // Atribui o valor ao txtVisor
                 txtVisor.Text = tempoCellValue ?? "Tempo inválido";
 
                 preenchAutomatico = true;
@@ -295,6 +308,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonTres_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -303,6 +317,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonQuatro_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -311,6 +326,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+        
         private void buttonCinco_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -319,6 +335,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonSeis_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -327,6 +344,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonSete_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -335,6 +353,7 @@ namespace Microondas
                 UpdateVisor();
             }
         }
+
         private void buttonOito_Click(object sender, EventArgs e)
         {
             if (input.Length < 4 && !preenchAutomatico)
@@ -420,8 +439,7 @@ namespace Microondas
             }
         }
 
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void Microondas_Load(object sender, EventArgs e)
         {
 
         }
@@ -441,8 +459,8 @@ namespace Microondas
                 }
                 else
                 {
-                    FormCadastro formCadastro = new FormCadastro(selectedId);
-                    formCadastro.ShowDialog();
+                    MicroondasCadastro MicroondasCadastro = new MicroondasCadastro(selectedId);
+                    MicroondasCadastro.ShowDialog();
                 }
                 LoadData();
             }

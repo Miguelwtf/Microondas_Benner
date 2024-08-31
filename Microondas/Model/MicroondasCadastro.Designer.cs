@@ -1,6 +1,6 @@
 ﻿namespace Microondas.Model
 {
-    partial class FormCadastro
+    partial class MicroondasCadastro
     {
         /// <summary>
         /// Required designer variable.
@@ -192,9 +192,9 @@
             this.Controls.Add(this.txtAlimento);
             this.Controls.Add(this.txtNomePrograma);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "FormCadastro";
-            this.Text = "FormCadastro";
-            this.Load += new System.EventHandler(this.FormCadastro_Load);
+            this.Name = "MicroondasCadastro";
+            this.Text = "MicroondasCadastro";
+            this.Load += new System.EventHandler(this.MicroondasCadastro_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
