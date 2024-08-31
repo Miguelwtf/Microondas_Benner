@@ -7,19 +7,6 @@ using Microondas.Models;
 
 namespace Microondas.DataAccess
 {
-    /*
-    public class ProgramaAquecimento
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Alimento { get; set; }
-        public int Tempo { get; set; }
-        public int Potencia { get; set; }
-        public string Instrucoes { get; set; }
-        public string Simbolo { get; set; }
-        public bool Padrao { get; set; }
-    }
-    */
     public class DBProgramas
     {
         public bool Add(ProgramaAquecimento programaAquecimento)

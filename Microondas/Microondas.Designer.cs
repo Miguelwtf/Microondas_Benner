@@ -48,6 +48,12 @@ namespace Microondas
             this.label1 = new System.Windows.Forms.Label();
             this.txtPotencia = new System.Windows.Forms.TextBox();
             this.dataGrid = new System.Windows.Forms.DataGridView();
+            this.btnDiminui = new System.Windows.Forms.Button();
+            this.btnAumenta = new System.Windows.Forms.Button();
+            this.btnNovo = new System.Windows.Forms.Button();
+            this.btnExclui = new System.Windows.Forms.Button();
+            this.btnEdita = new System.Windows.Forms.Button();
+            this.txtProgresso = new System.Windows.Forms.TextBox();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alimento = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,12 +62,7 @@ namespace Microondas
             this.simbolo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.padrao = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.instrucoes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnDiminui = new System.Windows.Forms.Button();
-            this.btnAumenta = new System.Windows.Forms.Button();
-            this.btnNovo = new System.Windows.Forms.Button();
-            this.btnExclui = new System.Windows.Forms.Button();
-            this.btnEdita = new System.Windows.Forms.Button();
-            this.txtProgresso = new System.Windows.Forms.TextBox();
+            this.TempoI = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,7 +71,7 @@ namespace Microondas
             this.txtVisor.Enabled = false;
             this.txtVisor.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtVisor.Location = new System.Drawing.Point(418, 314);
-            this.txtVisor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtVisor.Margin = new System.Windows.Forms.Padding(2);
             this.txtVisor.MaxLength = 4;
             this.txtVisor.Name = "txtVisor";
             this.txtVisor.Size = new System.Drawing.Size(242, 80);
@@ -84,7 +85,7 @@ namespace Microondas
             // buttonZero
             // 
             this.buttonZero.Location = new System.Drawing.Point(746, 471);
-            this.buttonZero.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonZero.Margin = new System.Windows.Forms.Padding(2);
             this.buttonZero.Name = "buttonZero";
             this.buttonZero.Size = new System.Drawing.Size(78, 48);
             this.buttonZero.TabIndex = 1;
@@ -95,7 +96,7 @@ namespace Microondas
             // btnUm
             // 
             this.btnUm.Location = new System.Drawing.Point(664, 418);
-            this.btnUm.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUm.Margin = new System.Windows.Forms.Padding(2);
             this.btnUm.Name = "btnUm";
             this.btnUm.Size = new System.Drawing.Size(78, 48);
             this.btnUm.TabIndex = 2;
@@ -106,7 +107,7 @@ namespace Microondas
             // btnDois
             // 
             this.btnDois.Location = new System.Drawing.Point(746, 419);
-            this.btnDois.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnDois.Margin = new System.Windows.Forms.Padding(2);
             this.btnDois.Name = "btnDois";
             this.btnDois.Size = new System.Drawing.Size(78, 48);
             this.btnDois.TabIndex = 3;
@@ -117,7 +118,7 @@ namespace Microondas
             // btnCinco
             // 
             this.btnCinco.Location = new System.Drawing.Point(746, 366);
-            this.btnCinco.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCinco.Margin = new System.Windows.Forms.Padding(2);
             this.btnCinco.Name = "btnCinco";
             this.btnCinco.Size = new System.Drawing.Size(78, 48);
             this.btnCinco.TabIndex = 6;
@@ -128,7 +129,7 @@ namespace Microondas
             // btnQuatro
             // 
             this.btnQuatro.Location = new System.Drawing.Point(664, 365);
-            this.btnQuatro.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuatro.Margin = new System.Windows.Forms.Padding(2);
             this.btnQuatro.Name = "btnQuatro";
             this.btnQuatro.Size = new System.Drawing.Size(78, 48);
             this.btnQuatro.TabIndex = 5;
@@ -139,7 +140,7 @@ namespace Microondas
             // btnTres
             // 
             this.btnTres.Location = new System.Drawing.Point(828, 418);
-            this.btnTres.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnTres.Margin = new System.Windows.Forms.Padding(2);
             this.btnTres.Name = "btnTres";
             this.btnTres.Size = new System.Drawing.Size(78, 48);
             this.btnTres.TabIndex = 4;
@@ -150,7 +151,7 @@ namespace Microondas
             // btnOito
             // 
             this.btnOito.Location = new System.Drawing.Point(746, 314);
-            this.btnOito.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOito.Margin = new System.Windows.Forms.Padding(2);
             this.btnOito.Name = "btnOito";
             this.btnOito.Size = new System.Drawing.Size(78, 48);
             this.btnOito.TabIndex = 9;
@@ -161,7 +162,7 @@ namespace Microondas
             // btnSete
             // 
             this.btnSete.Location = new System.Drawing.Point(664, 313);
-            this.btnSete.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSete.Margin = new System.Windows.Forms.Padding(2);
             this.btnSete.Name = "btnSete";
             this.btnSete.Size = new System.Drawing.Size(78, 48);
             this.btnSete.TabIndex = 8;
@@ -172,7 +173,7 @@ namespace Microondas
             // btnSeis
             // 
             this.btnSeis.Location = new System.Drawing.Point(828, 366);
-            this.btnSeis.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSeis.Margin = new System.Windows.Forms.Padding(2);
             this.btnSeis.Name = "btnSeis";
             this.btnSeis.Size = new System.Drawing.Size(78, 48);
             this.btnSeis.TabIndex = 7;
@@ -183,7 +184,7 @@ namespace Microondas
             // btnPara
             // 
             this.btnPara.Location = new System.Drawing.Point(664, 471);
-            this.btnPara.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnPara.Margin = new System.Windows.Forms.Padding(2);
             this.btnPara.Name = "btnPara";
             this.btnPara.Size = new System.Drawing.Size(78, 48);
             this.btnPara.TabIndex = 12;
@@ -194,7 +195,7 @@ namespace Microondas
             // btnLiga
             // 
             this.btnLiga.Location = new System.Drawing.Point(828, 471);
-            this.btnLiga.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLiga.Margin = new System.Windows.Forms.Padding(2);
             this.btnLiga.Name = "btnLiga";
             this.btnLiga.Size = new System.Drawing.Size(78, 48);
             this.btnLiga.TabIndex = 11;
@@ -205,7 +206,7 @@ namespace Microondas
             // btnNove
             // 
             this.btnNove.Location = new System.Drawing.Point(828, 313);
-            this.btnNove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnNove.Margin = new System.Windows.Forms.Padding(2);
             this.btnNove.Name = "btnNove";
             this.btnNove.Size = new System.Drawing.Size(78, 48);
             this.btnNove.TabIndex = 10;
@@ -248,7 +249,8 @@ namespace Microondas
             this.potencia,
             this.simbolo,
             this.padrao,
-            this.instrucoes});
+            this.instrucoes,
+            this.TempoI});
             this.dataGrid.Location = new System.Drawing.Point(12, 12);
             this.dataGrid.MultiSelect = false;
             this.dataGrid.Name = "dataGrid";
@@ -258,6 +260,67 @@ namespace Microondas
             this.dataGrid.TabIndex = 16;
             this.dataGrid.Click += new System.EventHandler(this.dataGrid_Click);
             this.dataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseDown);
+            // 
+            // btnDiminui
+            // 
+            this.btnDiminui.Location = new System.Drawing.Point(418, 470);
+            this.btnDiminui.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDiminui.Name = "btnDiminui";
+            this.btnDiminui.Size = new System.Drawing.Size(78, 48);
+            this.btnDiminui.TabIndex = 17;
+            this.btnDiminui.Text = "Diminui";
+            this.btnDiminui.UseVisualStyleBackColor = true;
+            this.btnDiminui.Click += new System.EventHandler(this.btnDiminui_Click);
+            // 
+            // btnAumenta
+            // 
+            this.btnAumenta.Location = new System.Drawing.Point(418, 418);
+            this.btnAumenta.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAumenta.Name = "btnAumenta";
+            this.btnAumenta.Size = new System.Drawing.Size(78, 48);
+            this.btnAumenta.TabIndex = 18;
+            this.btnAumenta.Text = "Aumenta";
+            this.btnAumenta.UseVisualStyleBackColor = true;
+            this.btnAumenta.Click += new System.EventHandler(this.btnAumenta_Click);
+            // 
+            // btnNovo
+            // 
+            this.btnNovo.Location = new System.Drawing.Point(12, 314);
+            this.btnNovo.Name = "btnNovo";
+            this.btnNovo.Size = new System.Drawing.Size(75, 23);
+            this.btnNovo.TabIndex = 19;
+            this.btnNovo.Text = "Novo";
+            this.btnNovo.UseVisualStyleBackColor = true;
+            this.btnNovo.Click += new System.EventHandler(this.btnNovo_Click);
+            // 
+            // btnExclui
+            // 
+            this.btnExclui.Location = new System.Drawing.Point(174, 314);
+            this.btnExclui.Name = "btnExclui";
+            this.btnExclui.Size = new System.Drawing.Size(75, 23);
+            this.btnExclui.TabIndex = 21;
+            this.btnExclui.Text = "Exclui";
+            this.btnExclui.UseVisualStyleBackColor = true;
+            this.btnExclui.Click += new System.EventHandler(this.btnExclui_Click);
+            // 
+            // btnEdita
+            // 
+            this.btnEdita.Location = new System.Drawing.Point(93, 314);
+            this.btnEdita.Name = "btnEdita";
+            this.btnEdita.Size = new System.Drawing.Size(75, 23);
+            this.btnEdita.TabIndex = 22;
+            this.btnEdita.Text = "Edita";
+            this.btnEdita.UseVisualStyleBackColor = true;
+            this.btnEdita.Click += new System.EventHandler(this.btnEdita_Click);
+            // 
+            // txtProgresso
+            // 
+            this.txtProgresso.Enabled = false;
+            this.txtProgresso.Location = new System.Drawing.Point(12, 290);
+            this.txtProgresso.Margin = new System.Windows.Forms.Padding(2);
+            this.txtProgresso.Name = "txtProgresso";
+            this.txtProgresso.Size = new System.Drawing.Size(894, 20);
+            this.txtProgresso.TabIndex = 23;
             // 
             // id
             // 
@@ -324,68 +387,13 @@ namespace Microondas
             this.instrucoes.Name = "instrucoes";
             this.instrucoes.Width = 81;
             // 
-            // btnDiminui
+            // TempoI
             // 
-            this.btnDiminui.Location = new System.Drawing.Point(418, 470);
-            this.btnDiminui.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnDiminui.Name = "btnDiminui";
-            this.btnDiminui.Size = new System.Drawing.Size(78, 48);
-            this.btnDiminui.TabIndex = 17;
-            this.btnDiminui.Text = "Diminui";
-            this.btnDiminui.UseVisualStyleBackColor = true;
-            this.btnDiminui.Click += new System.EventHandler(this.btnDiminui_Click);
+            this.TempoI.HeaderText = "TempoInt";
+            this.TempoI.Name = "TempoI";
+            this.TempoI.Visible = false;
             // 
-            // btnAumenta
-            // 
-            this.btnAumenta.Location = new System.Drawing.Point(418, 418);
-            this.btnAumenta.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnAumenta.Name = "btnAumenta";
-            this.btnAumenta.Size = new System.Drawing.Size(78, 48);
-            this.btnAumenta.TabIndex = 18;
-            this.btnAumenta.Text = "Aumenta";
-            this.btnAumenta.UseVisualStyleBackColor = true;
-            this.btnAumenta.Click += new System.EventHandler(this.btnAumenta_Click);
-            // 
-            // btnNovo
-            // 
-            this.btnNovo.Location = new System.Drawing.Point(12, 314);
-            this.btnNovo.Name = "btnNovo";
-            this.btnNovo.Size = new System.Drawing.Size(75, 23);
-            this.btnNovo.TabIndex = 19;
-            this.btnNovo.Text = "Novo";
-            this.btnNovo.UseVisualStyleBackColor = true;
-            this.btnNovo.Click += new System.EventHandler(this.btnNovo_Click);
-            // 
-            // btnExclui
-            // 
-            this.btnExclui.Location = new System.Drawing.Point(174, 314);
-            this.btnExclui.Name = "btnExclui";
-            this.btnExclui.Size = new System.Drawing.Size(75, 23);
-            this.btnExclui.TabIndex = 21;
-            this.btnExclui.Text = "Exclui";
-            this.btnExclui.UseVisualStyleBackColor = true;
-            this.btnExclui.Click += new System.EventHandler(this.btnExclui_Click);
-            // 
-            // btnEdita
-            // 
-            this.btnEdita.Location = new System.Drawing.Point(93, 314);
-            this.btnEdita.Name = "btnEdita";
-            this.btnEdita.Size = new System.Drawing.Size(75, 23);
-            this.btnEdita.TabIndex = 22;
-            this.btnEdita.Text = "Edita";
-            this.btnEdita.UseVisualStyleBackColor = true;
-            this.btnEdita.Click += new System.EventHandler(this.btnEdita_Click);
-            // 
-            // txtProgresso
-            // 
-            this.txtProgresso.Enabled = false;
-            this.txtProgresso.Location = new System.Drawing.Point(12, 290);
-            this.txtProgresso.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.txtProgresso.Name = "txtProgresso";
-            this.txtProgresso.Size = new System.Drawing.Size(894, 20);
-            this.txtProgresso.TabIndex = 23;
-            // 
-            // Form1
+            // Microondas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -413,7 +421,7 @@ namespace Microondas
             this.Controls.Add(this.buttonZero);
             this.Controls.Add(this.txtVisor);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Microondas";
             this.Text = "Microondas";
             this.Load += new System.EventHandler(this.Microondas_Load);
@@ -444,6 +452,10 @@ namespace Microondas
         private System.Windows.Forms.DataGridView dataGrid;
         private System.Windows.Forms.Button btnDiminui;
         private System.Windows.Forms.Button btnAumenta;
+        private System.Windows.Forms.Button btnNovo;
+        private System.Windows.Forms.Button btnExclui;
+        private System.Windows.Forms.Button btnEdita;
+        private System.Windows.Forms.TextBox txtProgresso;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn nome;
         private System.Windows.Forms.DataGridViewTextBoxColumn alimento;
@@ -452,10 +464,7 @@ namespace Microondas
         private System.Windows.Forms.DataGridViewTextBoxColumn simbolo;
         private System.Windows.Forms.DataGridViewTextBoxColumn padrao;
         private System.Windows.Forms.DataGridViewTextBoxColumn instrucoes;
-        private System.Windows.Forms.Button btnNovo;
-        private System.Windows.Forms.Button btnExclui;
-        private System.Windows.Forms.Button btnEdita;
-        private System.Windows.Forms.TextBox txtProgresso;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TempoI;
     }
 }
 
