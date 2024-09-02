@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Windows.Forms;
 
-namespace Microondas.Util
+namespace Microondas.Utils
 {
     public class UpdateVisor
     {
@@ -13,13 +14,12 @@ namespace Microondas.Util
             int minutos = 0;
             int segundos = 0;
 
-
             if (input.Length < 5)
             {
                 minutos = int.Parse(paddedInput.Substring(0, 2));
                 segundos = int.Parse(paddedInput.Substring(2, 2));
             }
-            if (input.Length < 6)
+            if (input.Length == 5)
             {
                 minutos = int.Parse(paddedInput.Substring(0, 2));
                 segundos = int.Parse(paddedInput.Substring(3, 2));

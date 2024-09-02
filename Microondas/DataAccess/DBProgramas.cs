@@ -1,8 +1,5 @@
 ﻿using Dapper;
 using System.Collections.Generic;
-using System.Linq;
-using Microondas;
-using Microondas.DataAccess;
 using Microondas.Models;
 
 namespace Microondas.DataAccess

@@ -1,20 +1,18 @@
 ﻿using System.Text;
 
-namespace Microondas.Util
+namespace Microondas.Utils
 {
     public class CarregaProgresso
     {
         private int potencia;
         private string simbolo;
 
-        // Construtor da classe
         public CarregaProgresso(int potencia, string simbolo)
         {
             this.potencia = potencia;
             this.simbolo = simbolo;
         }
 
-        // Método para gerar o progresso
         public string GerarProgresso(string textoAtual)
         {
             StringBuilder progresso = new StringBuilder(textoAtual);

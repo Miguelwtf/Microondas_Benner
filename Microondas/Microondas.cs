@@ -1,18 +1,9 @@
 ﻿using Microondas.Model;
-using Microondas.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microondas.DataAccess;
 using Microondas.Utils;
-using Microondas.Util;
-using System.Security.Cryptography;
 
 namespace Microondas
 {
@@ -21,27 +12,28 @@ namespace Microondas
         private int tempoInt = 0;
 
         private string input = "";
-        private string progresso = "";
-        
+
         private int totalTempoSegundos;
-        private int indPotencia = 0;
-        
+        private int indPotencia = 10;
+
         private bool isOperando = false;
         private bool preenchAutomatico = false;
         private bool isPausado = false;
-        
+
         private const int defaultPotencia = 10;
         private const string defaultVisor = "00:00";
         private const string defaultSimbolo = ".";
 
-        private UpdateVisor updateVisor = new UpdateVisor(); 
-        private TimeConverter timeConverter = new TimeConverter(); 
-        
+        private UpdateVisor updateVisor = new UpdateVisor();
+        private TimeConverter timeConverter = new TimeConverter();
+
+
         public Microondas()
         {
             InitializeComponent();
             timer.Interval = 1000;
             LoadData();
+
             txtVisor.Text = defaultVisor;
         }
 
@@ -77,7 +69,6 @@ namespace Microondas
             }
         }
 
-        /* Timer */
         private void timer_Tick(object sender, EventArgs e)
         {
             string simbolo;
@@ -88,22 +79,21 @@ namespace Microondas
                 totalTempoSegundos--;
 
                 TimeSpan time = TimeSpan.FromSeconds(totalTempoSegundos);
-                txtVisor.Text = time.ToString(@"mm\:ss"); 
+                txtVisor.Text = time.ToString(@"mm\:ss");
 
                 if (dataGrid.SelectedRows.Count > 0)
                 {
                     var selectedRow = dataGrid.SelectedRows[0];
                     simbolo = selectedRow.Cells["Simbolo"].Value?.ToString() ?? ".";
-                    potencia = int.Parse(selectedRow.Cells["Potencia"].Value.ToString());
                 }
                 else
                 {
                     simbolo = ".";
-                    potencia = indPotencia;
                 }
 
-                var carregaProgresso = new CarregaProgresso(potencia, simbolo);
-                txtProgresso.Text = carregaProgresso.GerarProgresso(txtProgresso.Text);
+                potencia = indPotencia;
+
+                CarregaProgresso(potencia, simbolo);
             }
             else
             {
@@ -112,9 +102,22 @@ namespace Microondas
             }
         }
 
-        /* Botão Liga */
+        private void CarregaProgresso(int potencia, string simbolo){
+            var carregaProgresso = new CarregaProgresso(potencia, simbolo);
+            txtProgresso.Text = carregaProgresso.GerarProgresso(txtProgresso.Text);
+            txtPotencia.Text = potencia.ToString();
+        }
+
         private void buttonLiga_Click(object sender, EventArgs e)
         {
+            if (!string.IsNullOrEmpty(input) && !isOperando)
+            {
+                int tempoInput = int.Parse(input);
+                totalTempoSegundos = timeConverter.ConverteTempo(tempoInput);
+            }
+
+            totalTempoSegundos = totalTempoSegundos == 0 ? 30 : totalTempoSegundos;
+
             if (isPausado)
             {
                 timer.Start();
@@ -122,53 +125,31 @@ namespace Microondas
             }
             else
             {
-                if (dataGrid.SelectedRows.Count > 0)
+                bool padrao = VerificaPadrao();
+
+                if (isOperando && !padrao)
                 {
-                    var selectedRow = dataGrid.SelectedRows[0];
-                    var potenciaCellValue = selectedRow.Cells["Potencia"].Value?.ToString();
-                    int tempo = tempoInt;
-                    int selectedId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells["Id"].Value);
-                    bool isPadrao = Convert.ToBoolean(dataGrid.SelectedRows[0].Cells["Padrao"].Value);
-
-                    if (tempo < 0)
-                    {
-                        int novoTempoEmSegundos = timeConverter.ConverteTempo(tempo);
-
-                        if (int.TryParse(potenciaCellValue, out int potencia))
-                        {
-                            indPotencia = potencia;
-                            txtPotencia.Text = indPotencia.ToString();
-                        }
-                    }
-
-                    if (isOperando && !isPadrao)
-                    {
-                        totalTempoSegundos += 30;
-                    }
-                }
-                else
-                {
-                    if (isOperando)
-                    {
-                        totalTempoSegundos += 30;
-                    }
-                    else
-                    {
-                        if (indPotencia == 0)
-                        {
-                            indPotencia = defaultPotencia;
-                            txtPotencia.Text = indPotencia.ToString();
-                        }
-
-                        int novoTempoEmSegundos = timeConverter.ConverteTempo(totalTempoSegundos);
-                        totalTempoSegundos = Math.Max(novoTempoEmSegundos, 30);
-                    }
+                    totalTempoSegundos += 30;
                 }
 
-                isPausado = false;
-                isOperando = true;
                 timer.Start();
             }
+
+            isOperando = true;
+        }
+
+        private bool VerificaPadrao()
+        {
+            if (dataGrid.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGrid.SelectedRows[0];
+
+                bool isPadrao = Convert.ToBoolean(selectedRow.Cells["Padrao"].Value);
+
+                return isPadrao;
+            }
+
+            return false;
         }
 
         private void dataGrid_MouseDown(object sender, MouseEventArgs e)
@@ -194,7 +175,6 @@ namespace Microondas
             LoadData();
         }
 
-        /* Botão Para */
         private void buttonPara_Click(object sender, EventArgs e)
         {
             if (isOperando)
@@ -206,28 +186,26 @@ namespace Microondas
                 }
                 else 
                 {
-                    input = "";
-                    totalTempoSegundos = 0;
-                    txtVisor.Text = defaultVisor;
-                    isOperando = false;
-                    isPausado = false;
-                    indPotencia = defaultPotencia;
-                    txtPotencia.Text = indPotencia.ToString();
-                    preenchAutomatico = false;
-                    txtProgresso.Text = "";
+                    ResetarEstado();
                 }
             }
             else
             {
-                input = "";
-                totalTempoSegundos = 0;
-                txtVisor.Text = defaultVisor;
-                indPotencia = defaultPotencia;
-                txtPotencia.Text = indPotencia.ToString();
-                isPausado = false;
-                preenchAutomatico = false;
-                txtProgresso.Text = "";
+                ResetarEstado();
             }
+        }
+
+        private void ResetarEstado()
+        {
+            input = "";
+            totalTempoSegundos = 0;
+            txtVisor.Text = defaultVisor;
+            indPotencia = defaultPotencia;
+            txtPotencia.Text = indPotencia.ToString();
+            isOperando = false;
+            isPausado = false;
+            preenchAutomatico = false;
+            txtProgresso.Text = "";
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
@@ -235,37 +213,42 @@ namespace Microondas
             if (dataGrid.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGrid.SelectedRows[0];
-                
-                var potenciaCellValue = selectedRow.Cells["Potencia"].Value;
-                int potencia;
 
-                var textTempoCellValue = selectedRow.Cells["Tempo"].Value;
+                AtualizarPotencia(selectedRow);
+                AtualizarTempo(selectedRow);
 
-                if (int.TryParse(potenciaCellValue?.ToString(), out potencia))
-                {
-                    indPotencia = potencia;
-                    txtPotencia.Text = potencia.ToString();
-                }
-                else
-                {
-                    indPotencia = defaultPotencia;
-                    txtPotencia.Text = "Potência inválida";
-                }
+                txtVisor.Text = updateVisor.Atualiza(selectedRow.Cells["Tempo"].Value.ToString());
 
-                string nomeColunaTempo = "TempoI"; 
-                if (selectedRow.Cells[nomeColunaTempo] != null)
-                {
-                    totalTempoSegundos = Convert.ToInt32(selectedRow.Cells[nomeColunaTempo].Value);
-                }
-
-                txtVisor.Text = updateVisor.Atualiza(textTempoCellValue.ToString());
                 preenchAutomatico = true;
+            }
+        }
+
+        private void AtualizarPotencia(DataGridViewRow row)
+        {
+            if (int.TryParse(row.Cells["Potencia"].Value?.ToString(), out int potencia))
+            {
+                indPotencia = potencia;
+                txtPotencia.Text = potencia.ToString();
+            }
+            else
+            {
+                indPotencia = defaultPotencia;
+                txtPotencia.Text = "Potência inválida";
+            }
+        }
+
+        private void AtualizarTempo(DataGridViewRow row)
+        {
+            string nomeColunaTempo = "TempoI";
+            if (row.Cells[nomeColunaTempo] != null)
+            {
+                totalTempoSegundos = Convert.ToInt32(row.Cells[nomeColunaTempo].Value);
             }
         }
 
         private void buttonZero_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -274,7 +257,7 @@ namespace Microondas
 
         private void buttonUm_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico) 
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -283,7 +266,7 @@ namespace Microondas
 
         private void buttonDois_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -292,7 +275,7 @@ namespace Microondas
 
         private void buttonTres_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -301,7 +284,7 @@ namespace Microondas
 
         private void buttonQuatro_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -310,7 +293,7 @@ namespace Microondas
         
         private void buttonCinco_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -319,7 +302,7 @@ namespace Microondas
 
         private void buttonSeis_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -328,7 +311,7 @@ namespace Microondas
 
         private void buttonSete_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -337,7 +320,7 @@ namespace Microondas
 
         private void buttonOito_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -346,7 +329,7 @@ namespace Microondas
 
         private void buttonNove_Click(object sender, EventArgs e)
         {
-            if (input.Length < 4 && !preenchAutomatico)
+            if (input.Length < 4 && !preenchAutomatico && !isOperando)
             {
                 input += (sender as Button).Text;
                 txtVisor.Text = updateVisor.Atualiza(input);
@@ -355,7 +338,9 @@ namespace Microondas
 
         private void btnAumenta_Click(object sender, EventArgs e)
         {
-            if (!preenchAutomatico)
+            bool padrao = VerificaPadrao();
+            
+            if (!padrao)
             {
                 if (indPotencia < 10)
                 {
@@ -367,8 +352,10 @@ namespace Microondas
 
         private void btnDiminui_Click(object sender, EventArgs e)
         {
-            if (!preenchAutomatico)
-            { 
+            bool padrao = VerificaPadrao();
+
+            if (!padrao)
+            {
                 if (indPotencia > 1)
                 {
                     indPotencia--;

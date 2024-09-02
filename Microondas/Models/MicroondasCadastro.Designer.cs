@@ -83,6 +83,7 @@
             this.txtTempo.Name = "txtTempo";
             this.txtTempo.Size = new System.Drawing.Size(65, 20);
             this.txtTempo.TabIndex = 4;
+            this.txtTempo.TextChanged += new System.EventHandler(this.txtTempo_TextChanged);
             this.txtTempo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTempo_KeyPress);
             // 
             // label1
@@ -172,7 +173,7 @@
             this.btnLimpar.UseVisualStyleBackColor = true;
             this.btnLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
             // 
-            // FormCadastro
+            // MicroondasCadastro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

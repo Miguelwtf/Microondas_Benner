@@ -14,7 +14,8 @@ namespace Microondas.Model
 {
     public partial class MicroondasCadastro : Form
     {
-
+        private bool isUpdating = false;
+        private int tempoConvertido = 0;
         private bool IsEditMode { get; set; }
         private int RecordId { get; set; }
 
@@ -25,6 +26,7 @@ namespace Microondas.Model
             if (recordId > 0)
             {
                 IsEditMode = true;
+
                 RecordId = recordId;
                 CarregarDados();
             }
@@ -54,7 +56,7 @@ namespace Microondas.Model
                 string.IsNullOrWhiteSpace(txtAlimento.Text) ||
                 string.IsNullOrWhiteSpace(txtSimbolo.Text) ||
                 !int.TryParse(txtPotencia.Text, out int potencia) ||
-                !int.TryParse(txtTempo.Text, out int tempo))
+                tempoConvertido <= 0)
             {
                 MessageBox.Show("Todos os campos obrigatórios devem ser preenchidos corretamente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -65,7 +67,7 @@ namespace Microondas.Model
                 Nome = txtNomePrograma.Text,
                 Alimento = txtAlimento.Text,
                 Potencia = potencia,
-                Tempo = tempo,
+                Tempo = tempoConvertido,
                 Simbolo = txtSimbolo.Text,
                 Instrucoes = txtInstrucoes.Text
             };
@@ -76,7 +78,7 @@ namespace Microondas.Model
             {
                 programa.Id = RecordId;
 
-                if (programa.Nome == "Aquecimento")
+                if (programa.Nome == "Aquecimento" || programa.Nome == "Aquecimento Rápido")
                 {
                     if (!int.TryParse(txtTempo.Text, out int tempoEmSegundos))
                     {
@@ -127,6 +129,57 @@ namespace Microondas.Model
             this.Close();
         }
 
+        private void txtTempo_TextChanged(object sender, EventArgs e)
+    
+        {
+            if (isUpdating)
+                return;
+
+            isUpdating = true;
+
+            string digits = new string(txtTempo.Text.Where(char.IsDigit).ToArray());
+
+            if (digits.Length > 4)
+            {
+                digits = digits.Substring(digits.Length - 4);
+            }
+
+            digits = digits.PadLeft(4, '0');
+            string minutos = digits.Substring(0, 2);
+            string segundos = digits.Substring(2, 2);
+
+            if (int.TryParse(segundos, out int segundosInt))
+            {
+                if (segundosInt > 59)
+                {
+                    segundos = "59";
+                }
+            }
+
+            string formatted = $"{minutos}:{segundos}";
+
+            if (txtTempo.Text != formatted)
+            {
+                txtTempo.Text = formatted;
+            }
+
+            txtTempo.SelectionStart = txtTempo.Text.Length;
+            isUpdating = false;
+
+            ConverterParaSegundos(minutos, segundos);
+        }
+
+        private void ConverterParaSegundos(string minutos, string segundos)
+        {
+            if (int.TryParse(minutos, out int minutosInt) && int.TryParse(segundos, out int segundosInt))
+            {
+                tempoConvertido = (minutosInt * 60) + segundosInt;
+            }
+            else
+            {
+                tempoConvertido = 0;
+            }
+        }
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
@@ -219,6 +272,5 @@ namespace Microondas.Model
         {
 
         }
-
     }
 }
