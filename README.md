@@ -20,7 +20,7 @@ Este projeto simula um painel de micro-ondas, demonstrando o controle de program
 
 ### Interface de Controle
 
-- **Painel Numérico**: Insira valores clicando nos botões ou digitando diretamente no teclado.
+- **Painel Numérico**: Insira valores clicando nos botões.
 - **Programas de Aquecimento**: Adicione e gerencie programas personalizados. Programas pré-definidos não são editáveis, exceto o programa **"Aquecimento"**, que permite ajustes de tempo (entre 1 segundo e 2 minutos) e potência.
 
 ### Uso dos Programas
