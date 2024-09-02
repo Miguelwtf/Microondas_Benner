@@ -201,6 +201,7 @@ namespace Microondas
             isPausado = false;
             preenchAutomatico = false;
             txtProgresso.Text = "";
+            selecaoManual = false;
         }
 
         private void CarregaProgresso(int potencia, string simbolo)
