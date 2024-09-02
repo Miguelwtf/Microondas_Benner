@@ -19,6 +19,7 @@ namespace Microondas
         private bool isOperando = false;
         private bool preenchAutomatico = false;
         private bool isPausado = false;
+        private bool selecaoManual = false;
 
         private const int defaultPotencia = 10;
         private const string defaultVisor = "00:00";
@@ -139,7 +140,7 @@ namespace Microondas
 
                 bool isPadrao = Convert.ToBoolean(selectedRow.Cells["Padrao"].Value);
 
-                return isPadrao;
+                return isPadrao && selecaoManual;
             }
 
             return false;
@@ -158,6 +159,7 @@ namespace Microondas
                 indPotencia = defaultPotencia;
                 txtPotencia.Text = indPotencia.ToString();
                 preenchAutomatico = false;
+                selecaoManual = false;
             }
         }
 
@@ -210,6 +212,7 @@ namespace Microondas
 
         private void dataGrid_Click(object sender, EventArgs e)
         {
+            selecaoManual = true;
             if (dataGrid.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGrid.SelectedRows[0];
@@ -409,7 +412,7 @@ namespace Microondas
 
         private void Microondas_Load(object sender, EventArgs e)
         {
-
+            dataGrid.ClearSelection();
         }
 
         private void btnEdita_Click(object sender, EventArgs e)
