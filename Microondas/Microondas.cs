@@ -33,7 +33,6 @@ namespace Microondas
             InitializeComponent();
             timer.Interval = 1000;
             LoadData();
-
             txtVisor.Text = defaultVisor;
         }
 
@@ -100,12 +99,6 @@ namespace Microondas
                 timer.Stop();
                 txtProgresso.Text = "Aquecimento concluído";
             }
-        }
-
-        private void CarregaProgresso(int potencia, string simbolo){
-            var carregaProgresso = new CarregaProgresso(potencia, simbolo);
-            txtProgresso.Text = carregaProgresso.GerarProgresso(txtProgresso.Text);
-            txtPotencia.Text = potencia.ToString();
         }
 
         private void buttonLiga_Click(object sender, EventArgs e)
@@ -206,6 +199,13 @@ namespace Microondas
             isPausado = false;
             preenchAutomatico = false;
             txtProgresso.Text = "";
+        }
+
+        private void CarregaProgresso(int potencia, string simbolo)
+        {
+            var carregaProgresso = new CarregaProgresso(potencia, simbolo);
+            txtProgresso.Text = carregaProgresso.GerarProgresso(txtProgresso.Text);
+            txtPotencia.Text = potencia.ToString();
         }
 
         private void dataGrid_Click(object sender, EventArgs e)
